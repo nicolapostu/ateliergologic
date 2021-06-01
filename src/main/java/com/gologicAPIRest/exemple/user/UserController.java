@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 
-@RequestMapping("/api")
+@RequestMapping("/user/api")
 @RestController
 public class UserController {
 
     @Autowired
     UserRepository userRepo ;
     @Autowired
-    UserService userService ;
+    UserService userService;
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,@RequestBody User user){
         User userupdated = userService.update(id,user);
 
@@ -28,7 +28,7 @@ public class UserController {
         }
 
     }
-    @PostMapping("/user")
+    @PostMapping("")
     public ResponseEntity<User> saveUser(@RequestBody User user){
         try {
             return new ResponseEntity<>(userRepo.save(user), HttpStatus.CREATED);
@@ -36,7 +36,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id){
         Optional<User> user = userRepo.findById(id);
 
@@ -46,9 +46,9 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PatchMapping("/user/{id}")
-    public ResponseEntity<User> patchedUser(@PathVariable Long id,@RequestBody User user){
-        User userbyId = userService.patch(id, user.getCredit());
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> patchedUser(@PathVariable Long id,String field , String value){
+        User userbyId = userService.patch(id, field, value);
         try {
             return new ResponseEntity<>(userbyId, HttpStatus.OK);
         }catch (Exception e){
