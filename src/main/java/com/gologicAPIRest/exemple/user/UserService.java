@@ -2,14 +2,14 @@ package com.gologicAPIRest.exemple.user;
 
 public interface UserService {
 
-	public User create(User user);
+	public UserResource create(UserResource userResource);
 	
-    public User update(Long id, User user);
+    public UserResource update(Long id, UserResource userResource) ;
     
-    public User patch(Long id,String field , String value);
+    public UserResource patch(Long id,UserResource userResource);
     
-    public User get(Long id);
+    public UserResource get(Long id);
     
-    public void delete(Long id);
+    public UserResource delete(Long id);
     
 }

@@ -5,54 +5,59 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 
 @RequestMapping("/user/api")
+@CrossOrigin
 @RestController
 public class UserController {
 
     @Autowired
-    UserRepository userRepo ;
+    UserRepository userRepository;
     @Autowired
     UserService userService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id,@RequestBody User user){
-        User userupdated = userService.update(id,user);
+    public ResponseEntity<UserResource> updateUser(@PathVariable Long id,@RequestBody UserResource userResource){
+        UserResource userUpdated = userService.update(id,userResource);
 
         try {
-            return new ResponseEntity<>(userupdated, HttpStatus.OK);
+            return new ResponseEntity<>(userUpdated, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
     @PostMapping("")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<UserResource> createUser(@RequestBody UserResource userResource){
         try {
-            return new ResponseEntity<>(userRepo.save(user), HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.create(userResource), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id){
-        Optional<User> user = userRepo.findById(id);
-
-        if (user.isPresent()){
-            return new ResponseEntity<>(user.get(),HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<UserResource> getUser(@PathVariable Long id){
+        return new ResponseEntity<>(userService.get(id),HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> patchedUser(@PathVariable Long id,String field , String value){
-        User userbyId = userService.patch(id, field, value);
+    public ResponseEntity<UserResource> patchedUser(@PathVariable Long id,@RequestBody UserResource userResource){
         try {
-            return new ResponseEntity<>(userbyId, HttpStatus.OK);
+            return new ResponseEntity<>(userService.patch(id, userResource) , HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserResource> deletedUser(@PathVariable Long id ){
+        try {
+            return new ResponseEntity<>(userService.delete(id) , HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
+
+

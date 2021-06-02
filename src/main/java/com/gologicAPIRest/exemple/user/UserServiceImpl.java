@@ -2,7 +2,6 @@ package com.gologicAPIRest.exemple.user;
 
 import javax.transaction.Transactional;
 
-import com.sun.jdi.IntegerValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,45 +9,61 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserRepository repo;
+    private UserRepository userRepository;
 
-    public User create(User user){
-        return repo.save(user);
+    @Autowired
+    private UserMapper userMapper;
+
+    @Override
+    public UserResource create(UserResource userResource){
+        User addedUser = new User() ;
+        addedUser.setName(userResource.getName());
+        addedUser.setEmail(userResource.getEmail());
+        addedUser.setPhone(userResource.getPhone());
+        addedUser.setCredit(userResource.getCredit());
+
+        userRepository.save(addedUser);
+        return userMapper.populateResource(addedUser);
     }
 
-    public User update(Long id, User user){
-        User userbyId = repo.getOne(id);
-        userbyId.setName(user.getName());
-        userbyId.setEmail(user.getEmail());
-        userbyId.setPhone(user.getPhone());
-        userbyId.setCredit(user.getCredit());
-        return repo.save(userbyId);
+    @Override
+    public UserResource update(Long id, UserResource userResource){
+        User userbyId = userRepository.getOne(id);
+        userbyId.setName(userResource.getName());
+        userbyId.setEmail(userResource.getEmail());
+        userbyId.setPhone(userResource.getPhone());
+        userbyId.setCredit(userResource.getCredit());
+        userRepository.save(userbyId);
+        return userMapper.populateResource(userbyId);
     }
-    public User patch(Long id, String field, String value){
-        User userById = repo.getOne(id);
-        switch(field) {
-            case "name":
-                userById.setName(value);
-            	break;
-            case "email":
-                userById.setEmail(value);
-                break;
-            case "phone":
-                userById.setPhone(value);
-                break;
-            case "credit":
-                userById.setCredit(Integer.parseInt(value));
-                break;
+    @Override
+    public UserResource patch(Long id, UserResource userResource){
+        User userById = userRepository.getOne(id);
+        if(userResource.getName() != null){
+            userById.setName(userResource.getName());
         }
-        return repo.save(userById);
+        if (userResource.getEmail() != null){
+            userById.setEmail(userResource.getEmail());
+        }
+        if (userResource.getPhone() != null){
+            userById.setPhone(userResource.getPhone());
+        }
+        if (userResource.getCredit() != null){
+            userById.setCredit(userResource.getCredit());
+        }
+        userRepository.save(userById);
+        return userMapper.populateResource(userById);
     }
 
-    public User get(Long id){
-        return repo.findById(id).get();
+    @Override
+    public UserResource get(Long id){ return userMapper.populateResource(userRepository.getOne(id)); }
+
+    @Override
+    public UserResource delete(Long id){
+        UserResource userResourceDeleted = get(id);
+        userRepository.deleteById(id);
+        return userResourceDeleted;
     }
 
-    public void delete(Long id){
-        repo.deleteById(id);
-    }
 }
 
