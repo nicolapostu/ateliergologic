@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Home User</title>
+</head>
+
+
+<body layout:fragment="content">
+
+<div class="row">
+    <div class="container">
+        <div class="ibox col-lg-6" wfd-id="60">
+            <div class="ibox-title" wfd-id="62">
+                <h5>Basic Table</h5>
+                <div class="ibox-tools" wfd-id="63">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content" wfd-id="61">
+
+                <table class="table">
+                    <thead>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal4"
+                            wfd-id="155">
+                        Add User
+                    </button>
+                    <div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" wfd-id="14"
+                         style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog" wfd-id="245">
+                            <div class="modal-content animated fadeIn" wfd-id="246">
+                                <div class="modal-header" wfd-id="249">
+                                    <button type="button" class="close" data-dismiss="modal" wfd-id="154"><span
+                                            aria-hidden="true" wfd-id="251">×</span><span class="sr-only" wfd-id="250">Close</span>
+                                    </button>
+                                    <i class="fa fa-clock-o modal-icon"></i>
+                                    <h4 class="modal-title">Add window</h4>
+                                </div>
+                                <div class="modal-body" wfd-id="248">
+                                    <div class="ibox-content" wfd-id="141">
+
+                                        <form class="m-t-md"
+                                             id="create-form">
+                                            <div class="form-group row" wfd-id="175">
+                                                <label class="col-sm-2 col-sm-2 col-form-label"
+                                                       wfd-id="178">Name</label>
+                                                <div class="col-sm-10" wfd-id="176">
+                                                    <input type="text" name="name"
+                                                           placeholder="Example : Nicola Postu"
+                                                           autocomplete="off" maxlength="25" id="name-id"/>
+                                                </div>
+                                            </div>
+                                            <div class="hr-line-dashed" wfd-id="166"></div>
+                                            <div class="form-group row" wfd-id="162">
+                                                <label class="col-sm-2 col-form-label" wfd-id="165">Email</label>
+                                                <div class="col-sm-10" wfd-id="163">
+                                                    <input type="email" name="email" class="form-control"
+                                                           placeholder="Example :abcde@gmail.com"
+                                                           autocomplete="on" maxlength="30" id="email-id"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" wfd-id="153">
+                                                <label class="col-sm-2 col-form-label" wfd-id="156">Phone</label>
+                                                <div class="col-sm-10" wfd-id="154">
+                                                    <input type="text" name="phone" class="form-control"
+                                                           data-mask="'mask' : (000) 000-0000"
+                                                           placeholder="Example :(000) 000-0000 " autocomplete="on"
+                                                           maxlength="14" id="phone-id"/>
+                                                </div>
+                                            </div>
+                                            <div class="hr-line-dashed" wfd-id="152"></div>
+                                            <div class="form-group row" wfd-id="148">
+                                                <label class="col-sm-2 col-form-label" wfd-id="151">Credit</label>
+                                                <div class="col-sm-10" wfd-id="149">
+                                                    <input type="text" name="credit" class="form-control"
+                                                           placeholder="0000"
+                                                           autocomplete="off" maxlength="16" id="credit-id"/>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer" wfd-id="247">
+                                                <button class="btn btn-white" data-dismiss="modal" wfd-id="153">Cancel
+                                                </button>
+                                                <button type="submit" class="btn btn-primary" id="submit-create-form">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Credit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td><a th:text="${user.name}" th:href="edit"> </a></td>
+                        <td th:text="${user.email}"/>
+                        <td th:text="${user.phone}"/>
+                        <td th:text="${user.credit}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        $(function () {
+            $('#submit-create-form').click(function (e) {
+                var form = $('#create-form');
+                var formData = form.serializeObject();
+                $.ajax({
+                    type: "POST",
+                    url: /*[[@{/user/api}]]*/,
+                data: JSON.stringify(formData),
+                dataType: 'json', contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                        console.log(data);
+                    }
+            })
+            ;
+        })
+        ;
+    })
+    ;
+    /*]]>*/
+
+</script>
+</body>
+</html>

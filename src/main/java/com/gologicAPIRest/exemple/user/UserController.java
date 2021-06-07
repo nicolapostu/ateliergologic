@@ -1,63 +1,31 @@
 package com.gologicAPIRest.exemple.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 
-
-@RequestMapping("/user/api")
-@CrossOrigin
-@RestController
+@Controller
+@RequestMapping("/")
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResource> updateUser(@PathVariable Long id,@RequestBody UserResource userResource){
-        UserResource userUpdated = userService.update(id,userResource);
-
-        try {
-            return new ResponseEntity<>(userUpdated, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+    @GetMapping("")
+    public String userList( Model model ) {
+        List<UserResource> users = userService.listeUsers() ;
+        UserResource userResource = new UserResource();
+        model.addAttribute("userResource",userResource);
+        model.addAttribute("users",users);
+        return "home";
     }
-    @PostMapping("")
-    public ResponseEntity<UserResource> createUser(@RequestBody UserResource userResource){
-        try {
-            return new ResponseEntity<>(userService.create(userResource), HttpStatus.CREATED);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResource> getUser(@PathVariable Long id){
-        return new ResponseEntity<>(userService.get(id),HttpStatus.OK);
-    }
+    @GetMapping("/edit")
+    public String userAdd( Model model ) {
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResource> patchedUser(@PathVariable Long id,@RequestBody UserResource userResource){
-        try {
-            return new ResponseEntity<>(userService.patch(id, userResource) , HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<UserResource> deletedUser(@PathVariable Long id ){
-        try {
-            return new ResponseEntity<>(userService.delete(id) , HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return "edit";
     }
 }
-
-

@@ -5,6 +5,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -63,6 +66,16 @@ public class UserServiceImpl implements UserService {
         UserResource userResourceDeleted = get(id);
         userRepository.deleteById(id);
         return userResourceDeleted;
+    }
+
+    @Override
+    public List<UserResource> listeUsers(){
+        List<UserResource> liste = new ArrayList<>();
+        List<User> listeEntity =  userRepository.findAll();
+        for (User user : listeEntity){
+            liste.add(userMapper.populateResource(user));
+        }
+        return liste;
     }
 
 }
