@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{/layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
+    <meta charset="UTF-8">
     <title>Home User</title>
 </head>
 
@@ -32,7 +33,7 @@
                             wfd-id="155">
                         Add User
                     </button>
-                    <div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" wfd-id="14"
+                    <div class="modal inmodal" id="myModal4" tabindex="-1"
                          style="display: none;" aria-hidden="true">
                         <div class="modal-dialog" wfd-id="245">
                             <div class="modal-content animated fadeIn" wfd-id="246">
@@ -46,8 +47,7 @@
                                 <div class="modal-body" wfd-id="248">
                                     <div class="ibox-content" wfd-id="141">
 
-                                        <form class="m-t-md"
-                                             id="create-form">
+                                        <form class="m-t-md" id="create-form">
                                             <div class="form-group row" wfd-id="175">
                                                 <label class="col-sm-2 col-sm-2 col-form-label"
                                                        wfd-id="178">Name</label>
@@ -66,6 +66,7 @@
                                                            autocomplete="on" maxlength="30" id="email-id"/>
                                                 </div>
                                             </div>
+                                            <div class="hr-line-dashed" wfd-id="152"></div>
                                             <div class="form-group row" wfd-id="153">
                                                 <label class="col-sm-2 col-form-label" wfd-id="156">Phone</label>
                                                 <div class="col-sm-10" wfd-id="154">
@@ -87,7 +88,7 @@
                                             <div class="modal-footer" wfd-id="247">
                                                 <button class="btn btn-white" data-dismiss="modal" wfd-id="153">Cancel
                                                 </button>
-                                                <button type="submit" class="btn btn-primary" id="submit-create-form">Save</button>
+                                                <button type="submit" class="btn btn-primary" id="submit-create-form" onclick="homePage()" >Save</button>
                                             </div>
                                         </form>
                                     </div>
@@ -105,7 +106,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="user : ${users}">
-                        <td><a th:text="${user.name}" th:href="edit"> </a></td>
+                        <td><a th:text="${user.name}" th:href="'edit/'+${user.id}" > </a></td>
                         <td th:text="${user.email}"/>
                         <td th:text="${user.phone}"/>
                         <td th:text="${user.credit}"/>
@@ -118,26 +119,32 @@
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
-        $(function () {
-            $('#submit-create-form').click(function (e) {
-                var form = $('#create-form');
-                var formData = form.serializeObject();
-                $.ajax({
-                    type: "POST",
-                    url: /*[[@{/user/api}]]*/,
+    $(function () {
+        $('#submit-create-form').click(function (e) {
+            var form = $('#create-form');
+            var formData = form.serializeObject();
+            $.ajax({
+                type: "POST",
+                url: /*[[@{/user/api}]]*/"",
                 data: JSON.stringify(formData),
                 dataType: 'json', contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                        console.log(data);
-                    }
+                    console.log(data);
+                    document.location.href = "/";
+                }
             })
             ;
         })
         ;
     })
     ;
-    /*]]>*/
 
+    function homePage(){
+        debugger;
+        console.log("home page");
+        document.location.reload();
+    }
+    /*]]>*/
 </script>
 </body>
 </html>

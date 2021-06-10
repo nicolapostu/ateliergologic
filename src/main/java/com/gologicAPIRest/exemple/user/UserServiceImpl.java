@@ -40,19 +40,19 @@ public class UserServiceImpl implements UserService {
         return userMapper.populateResource(userbyId);
     }
     @Override
-    public UserResource patch(Long id, UserResource userResource){
+    public UserResource patch(Long id, String field,String value){
         User userById = userRepository.getOne(id);
-        if(userResource.getName() != null){
-            userById.setName(userResource.getName());
+        if(field.equals("name")){
+            userById.setName(value);
         }
-        if (userResource.getEmail() != null){
-            userById.setEmail(userResource.getEmail());
+        if (field.equals("email")){
+            userById.setEmail(value);
         }
-        if (userResource.getPhone() != null){
-            userById.setPhone(userResource.getPhone());
+        if (field.equals("phone")){
+            userById.setPhone(value);
         }
-        if (userResource.getCredit() != null){
-            userById.setCredit(userResource.getCredit());
+        if (field.equals("credit")){
+            userById.setCredit(Integer.parseInt(value));
         }
         userRepository.save(userById);
         return userMapper.populateResource(userById);

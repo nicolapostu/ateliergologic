@@ -8,7 +8,7 @@ public interface UserService {
 	
     public UserResource update(Long id, UserResource userResource) ;
     
-    public UserResource patch(Long id,UserResource userResource);
+    public UserResource patch(Long id,String field, String value);
     
     public UserResource get(Long id);
     

@@ -41,10 +41,10 @@ public class UserApiController {
         return new ResponseEntity<>(userService.get(id),HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResource> patchedUser(@PathVariable Long id,@RequestBody UserResource userResource){
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<UserResource> patchedUser(@PathVariable Long id,@RequestBody UpdateField updateField){
         try {
-            return new ResponseEntity<>(userService.patch(id, userResource) , HttpStatus.OK);
+            return new ResponseEntity<>(userService.patch(id, updateField.getField(), updateField.getValue()) , HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
