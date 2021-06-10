@@ -45,9 +45,8 @@
                                     <h4 class="modal-title">Add window</h4>
                                 </div>
                                 <div class="modal-body" wfd-id="248">
-                                    <div class="ibox-content" wfd-id="141">
-
-                                        <form class="m-t-md" id="create-form">
+                                    <form method="post" id="create-form">
+                                    <div class="ibox-content" >
                                             <div class="form-group row" wfd-id="175">
                                                 <label class="col-sm-2 col-sm-2 col-form-label"
                                                        wfd-id="178">Name</label>
@@ -84,13 +83,14 @@
                                                            placeholder="0000"
                                                            autocomplete="off" maxlength="16" id="credit-id"/>
                                                 </div>
+                                                </form>
                                             </div>
                                             <div class="modal-footer" wfd-id="247">
                                                 <button class="btn btn-white" data-dismiss="modal" wfd-id="153">Cancel
                                                 </button>
-                                                <button type="submit" class="btn btn-primary" id="submit-create-form" onclick="homePage()" >Save</button>
+                                                <button class="btn btn-primary" id="submit-create-form">Save</button>
                                             </div>
-                                        </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +121,9 @@
     /*<![CDATA[*/
     $(function () {
         $('#submit-create-form').click(function (e) {
+
+            //$.ajax().done(function() {console.log("Done"); debugger;});
+
             var form = $('#create-form');
             var formData = form.serializeObject();
             $.ajax({
@@ -128,22 +131,14 @@
                 url: /*[[@{/user/api}]]*/"",
                 data: JSON.stringify(formData),
                 dataType: 'json', contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    console.log(data);
-                    document.location.href = "/";
-                }
-            })
+            }).done(function() {
+                document.location.href = "/";
+            });
             ;
         })
         ;
     })
     ;
-
-    function homePage(){
-        debugger;
-        console.log("home page");
-        document.location.reload();
-    }
     /*]]>*/
 </script>
 </body>

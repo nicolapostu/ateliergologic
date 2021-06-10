@@ -19,8 +19,6 @@ public class UserController {
     @GetMapping("")
     public String userList( Model model ) {
         List<UserResource> users = userService.listeUsers() ;
-        UserResource userResource = new UserResource();
-        model.addAttribute("userResource",userResource);
         model.addAttribute("users",users);
         return "home";
     }

@@ -1,164 +1,93 @@
 <!DOCTYPE html>
 <html layout:decorate="~{/layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <title>Edit User</title>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
 </head>
 <body layout:fragment="content">
 <div class="container">
-  <div class="ibox-content">
-      <form class="m-t-md" id="edit-form" >
-        <div class="form-group row">
-          <label class="col-sm-2 col-sm-2 col-form-label"
-                 wfd-id="178">Name</label>
-          <div class="col-sm-10">
-            <input type="text" name="name" th:value="${userResource.name}" maxlength="25" id="name"/>
-          </div>
-        </div>
-        <div class="hr-line-dashed" wfd-id="166"></div>
-        <div class="form-group row" wfd-id="162">
-          <label class="col-sm-2 col-form-label" wfd-id="165">Email</label>
-          <div class="col-sm-10" wfd-id="163">
-            <input type="email" name="email" th:value="${userResource.email}" maxlength="30" id="email"/>
-          </div>
-        </div>
-        <div class="hr-line-dashed" wfd-id="152"></div>
-        <div class="form-group row" wfd-id="153">
-          <label class="col-sm-2 col-form-label" wfd-id="156">Phone</label>
-          <div class="col-sm-10" wfd-id="154">
-            <input type="text" name="phone" class="form-control"
-                   data-mask="'mask' : (000) 000-0000"
-                   th:value="${userResource.phone}"
-                   maxlength="14" id="phone"/>
-          </div>
-        </div>
-        <div class="hr-line-dashed" wfd-id="152"></div>
-        <div class="form-group row" wfd-id="148">
-          <label class="col-sm-2 col-form-label" wfd-id="151">Credit</label>
-          <div class="col-sm-10" wfd-id="149">
-            <input type="text" name="credit" class="form-control"
-                   th:value="${userResource.credit}" maxlength="16" id="credit"/>
-          </div>
-        </div>
-        <div class="modal-footer" >
-          <button class="btn btn-red" id="delete-user"  >Delete
-          </button>
-        </div>
-      </form>
-  </div>
+    <div class="ibox-content">
+        <form class="m-t-md" id="edit-form">
+            <div class="form-group row">
+                <label class="col-sm-2 col-sm-2 col-form-label"
+                       wfd-id="178">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class='ajaxCallOnchange' name="name" th:value="${userResource.name}"
+                           maxlength="25" id="name"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed" wfd-id="166"></div>
+            <div class="form-group row" wfd-id="162">
+                <label class="col-sm-2 col-form-label" wfd-id="165">Email</label>
+                <div class="col-sm-10" wfd-id="163">
+                    <input type="email" class='ajaxCallOnchange' name="email" th:value="${userResource.email}"
+                           maxlength="30" id="email"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed" wfd-id="152"></div>
+            <div class="form-group row" wfd-id="153">
+                <label class="col-sm-2 col-form-label" wfd-id="156">Phone</label>
+                <div class="col-sm-10" wfd-id="154">
+                    <input type="text" class='ajaxCallOnchange' name="phone"
+                           th:value="${userResource.phone}"
+                           maxlength="14" id="phone"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed" wfd-id="152"></div>
+            <div class="form-group row" wfd-id="148">
+                <label class="col-sm-2 col-form-label" wfd-id="151">Credit</label>
+                <div class="col-sm-10" wfd-id="149">
+                    <input type="text" class='ajaxCallOnchange' name="credit"
+                           th:value="${userResource.credit}" maxlength="16" id="credit"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-red" id="delete-user">Delete
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-      <script th:inline="javascript">
-
-        $("#name").focusout(function(){
-          /*<![CDATA[*/
-          $(function () {
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $(".ajaxCallOnchange").change(function () {
             var data = {
-              field:$("#name").attr("name"),
-              value:$("#name").val()
+                field: $(this).attr("name"),
+                value: $(this).val()
             }
             var url = /*[[@{/user/api/{id}(id= ${userResource.id})}]]*/""
             $.ajax({
-              method: "PATCH",
-              url: url ,
-              data: JSON.stringify(data),
-              contentType: "application/json",
-              success: function (data) {
-                console.log(data);
-              }
+                method: "PATCH",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                }
             })
-            ;
-          })
-          ;
-          /*]]>*/
+
         });
 
-        $("#phone").focusout(function(){
-          /*<![CDATA[*/
-          $(function () {
-            var data = {
-              field:$("#phone").attr("name"),
-              value:$("#phone").val()
-            }
-            var url = /*[[@{/user/api/{id}(id= ${userResource.id})}]]*/""
-            $.ajax({
-              method: "PATCH",
-              url: url ,
-              data: JSON.stringify(data),
-              contentType: "application/json",
-              success: function (data) {
-                console.log(data);
-              }
-            })
-            ;
-          })
-          ;
-          /*]]>*/
-        });
 
-        $("#email").focusout(function(){
-          /*<![CDATA[*/
-          $(function () {
-            var data = {
-              field:$("#email").attr("name"),
-              value:$("#email").val()
-            }
-            var url = /*[[@{/user/api/{id}(id= ${userResource.id})}]]*/""
-            $.ajax({
-              method: "PATCH",
-              url: url ,
-              data: JSON.stringify(data),
-              contentType: "application/json",
-              success: function (data) {
-                console.log(data);
-              }
-            })
-            ;
-          })
-          ;
-          /*]]>*/
-        });
-
-        $("#credit").focusout(function(){
-          /*<![CDATA[*/
-          $(function () {
-            var data = {
-              field:$("#credit").attr("name"),
-              value:$("#credit").val()
-            }
-            var url = /*[[@{/user/api/{id}(id= ${userResource.id})}]]*/""
-            $.ajax({
-              method: "PATCH",
-              url: url ,
-              data: JSON.stringify(data),
-              contentType: "application/json",
-              success: function (data) {
-                console.log(data);
-              }
-            })
-            ;
-          })
-          ;
-          /*]]>*/
-        });
-
-        /*<![CDATA[*/
-        $(function () {
-          $('#delete-user').click(function (e) {
-                    $.ajax({
-                      type: "DELETE",
-                      url: /*[[@{/user/api/{id}(id= ${userResource.id})}]]*/"",
-                      success: function (result) {
+        $('#delete-user').click(function (e) {
+                $.ajax({
+                    type: "DELETE",
+                    url: /*[[@{/user/api/{id}(id= ${userResource.id})}]]*/"",
+                    success: function (result) {
                         console.log(result);
-                      },
-                      error: function (e) {
+                        document.location.href = "/";
+                    },
+                    error: function (e) {
                         console.log(e);
-                      }
-                    })
-                  }
-                  /*]]>*/
-          );
-        });
-      </script>
+                    }
+                })
+            }
+        );
+    });
+
+    /*]]>*/
+</script>
 </body>
 
 </html>
